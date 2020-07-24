@@ -16,6 +16,10 @@ class Cell:
     def get_colour(self):
         if self.purpose == None:
             self.colour = (0,255,0)     #walkable is green
+        elif self.purpose == 'start':
+            self.colour = (255,0,0)     #start is red
+        elif self.purpose == 'finish':
+            self.colour = (0,0,255)     #end is blue
         else:
-            self.colour = (0,0,0)
+            self.colour = (0,0,0)       #walls are black
         self.tile.fill(self.colour)

@@ -1,5 +1,5 @@
 import pygame as py
-from cell import Cell
+from map_creation.cell import Cell
 
 class Window:
     def __init__(self,main):

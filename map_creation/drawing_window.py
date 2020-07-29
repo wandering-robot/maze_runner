@@ -7,7 +7,7 @@ class Window:
 
         py.init()
         self.size = (500,500)
-        self.cell_size = 10
+        self.cell_size = 100
         #initialize the window and background
         self.display_window = py.display.set_mode((self.size))
         self.background = py.Surface(self.display_window.get_size()).convert()

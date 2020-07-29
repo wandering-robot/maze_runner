@@ -15,7 +15,8 @@ class Main:
             self.window.update_window()
             self.handler.handle()
         ai_section = AI_main(self.window.cells)       #pass the created maze to the AI_learner by exiting the previous window
-
+        ai_section.run_episodes()
+        
 if __name__ == "__main__":
     main = Main()
-    main.run()
+

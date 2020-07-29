@@ -41,25 +41,37 @@ class Handler:
     def make_start(self):
         pos = py.mouse.get_pos()
         cell_id = self.pixel2cell(pos)
-        self.main.window.cells[cell_id].purpose = 'start'
+        try:
+            self.main.window.cells[cell_id].purpose = 'start'
+        except:
+            pass
 
     #create the finish line for the maze runner from the mouse position
     def make_finish(self):
         pos = py.mouse.get_pos()
         cell_id = self.pixel2cell(pos)
-        self.main.window.cells[cell_id].purpose = 'finish'
+        try:
+            self.main.window.cells[cell_id].purpose = 'finish'
+        except:
+            pass
 
     #create a wall to block the maze runner from the mouse position
     def create_wall(self):
         pos = py.mouse.get_pos()
         cell_id = self.pixel2cell(pos)
-        self.main.window.cells[cell_id].purpose = 'wall'
+        try:
+            self.main.window.cells[cell_id].purpose = 'wall'
+        except:
+            pass
 
     #delete a wall from the mouse position
     def delete_wall(self):
         pos = py.mouse.get_pos()
         cell_id = self.pixel2cell(pos)
-        self.main.window.cells[cell_id].purpose = None
+        try:
+            self.main.window.cells[cell_id].purpose = None
+        except:
+            pass
     
     #shutting down the program
     def stop_running(self):

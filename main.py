@@ -5,6 +5,8 @@ from ai_learner.ai_main import AI_main
 import pickle
 from map_creation.cell import Cell          #think I need this to pickle/unpickle
 
+import atexit
+
 class Main:
     def __init__(self):
         #self.window is created in the self.run() method now
@@ -14,8 +16,8 @@ class Main:
         self.cell_dict = None               #data that gets loaded/saved
 
         self.drawing = True
-        self.run()
 
+    #main method to run all of the program
     def run(self):
         self.drawing = self.load_or_make()
         self.get_file_name()
@@ -28,8 +30,15 @@ class Main:
                 self.window.update_window()
                 self.handler.handle()
             self.cell_dict = self.window.cells
-        ai_section = AI_main(self.cell_dict)       #pass the created maze to the AI_learner by exiting the previous window
-        ai_section.run_episodes()
+        self.ai_section = AI_main(self.cell_dict)       #pass the created maze to the AI_learner by exiting the previous window
+        self.ai_section.run_episodes()
+
+
+    #method called at end of session to save experience
+    def save_ai_knowledge(self):
+        qs = self.ai_section.agent.qs
+        outfile = open(self.maze_file_name + f'_ai_{self.ai_section.agent.episode_number:04}', 'wb')
+        pickle.dump(qs,outfile,protocol=pickle.HIGHEST_PROTOCOL)
 
     #by using self.maze_file_name, return a dictionary of all the cells
     def load_file(self):
@@ -41,7 +50,7 @@ class Main:
             except:
                 self.maze_file_name = input('That file name does not exist, please re-enter file name:\t')
         self.cell_dict = pickle.load(infile)
-    #will eventually need to reinvoke this when wanting to draw it out
+            #will eventually need to reinvoke this when wanting to draw it out
         # for cell in self.cell_dict.values():
         #     cell.re_surface()
         infile.close()
@@ -76,4 +85,6 @@ class Main:
 
 if __name__ == "__main__":
     main = Main()
+    atexit.register(main.save_ai_knowledge)
+    main.run()
 

@@ -13,6 +13,17 @@ class Cell:
     def __repr__(self):
         return f'Cell@{self.coord[0]}&{self.coord[1]}'
     
+
+    #will be needed to be called once it needs to redraw the tiles
+    #   needs to have py.display initialized before calling it
+    def re_surface(self):
+        self.tile = py.Surface((self.size,self.size)).convert()
+
+    #called to remove surface values for saving
+    def de_surface(self):
+        self.tile = None
+
+
     def get_colour(self):
         if self.purpose == None:
             self.colour = (0,255,0)     #walkable is green

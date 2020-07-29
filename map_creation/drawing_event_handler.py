@@ -6,11 +6,18 @@ class Handler:
         self.main = main
         self.wall_maker_mode = False
         self.wall_delete_mode = False
+
+        #used to check that a start and finish have been drawn
+        self.made_start = False
+        self.made_finish = False
     
     def handle(self):
         for event in py.event.get():    
             if event.type == py.QUIT:
-                self.stop_running()
+                if self.made_start and self.made_finish:    #ensure start and finish are made
+                    self.stop_running()
+                else:
+                    print("Error: Must have a start and finish")
             elif event.type == py.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     self.wall_maker_mode = True
@@ -43,6 +50,7 @@ class Handler:
         cell_id = self.pixel2cell(pos)
         try:
             self.main.window.cells[cell_id].purpose = 'start'
+            self.made_start = True
         except:
             pass
 
@@ -52,6 +60,7 @@ class Handler:
         cell_id = self.pixel2cell(pos)
         try:
             self.main.window.cells[cell_id].purpose = 'finish'
+            self.made_finish = True
         except:
             pass
 
@@ -75,5 +84,6 @@ class Handler:
     
     #shutting down the program
     def stop_running(self):
-        self.main.running = False
+        self.main.drawing = False
+        self.main.save_file()
         py.quit()

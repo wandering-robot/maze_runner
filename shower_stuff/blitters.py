@@ -5,6 +5,7 @@ class Avatar:
         self.size = size
         self.tile = py.Surface((self.size,self.size)).convert()
         self.colour = (255,255,255)
+        self.tile.fill(self.colour)
         
         self.coord = None
 

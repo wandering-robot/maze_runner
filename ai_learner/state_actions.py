@@ -14,7 +14,7 @@ class State:
         if self.purpose == 'wall':
             return -5
         elif self.purpose == 'finish':
-            return 0
+            return 5
         else:
             return -1
 

@@ -20,7 +20,6 @@ class Agent:
         self.found_terminal = False     #use this to differentiate between episodes, changed in the next_state method
 
     def run_episode(self):
-        self.reset_eligibilities()
         self.episode_itr = 0
 
         state = self.starting_state
@@ -38,7 +37,6 @@ class Agent:
                 q_all.value += self.main.alpha*delta*q_all.eligibility
 
             self.episode_itr += 1
-            self.display_state_values(q)
             state, action = state_prime, action_prime
 
 
@@ -47,44 +45,6 @@ class Agent:
     #prints inormatin about episode run
     def finish_episode(self):
         print(f'Episode {self.episode_number} took {self.episode_itr} iterations')
-
-    #prints inormation about current state values
-    def display_state_values(self,q):
-        matrix = [[0 for _ in range(5)] for _ in range(5)]
-        for state in self.states.values():
-            val = 0
-            tot = 0
-            for action in self.actions:
-                val += self.qs[(state.coord,action.tup)].value
-                tot += 1
-            matrix[state.coord[1]][state.coord[0]] = val/tot
-        i = 0
-        for row in matrix:
-            j = 0
-            for num in row:
-                if q.state.coord[1] == i and q.state.coord[0] == j:
-                    print(f'{num:.2f}!',end='\t')
-                else:
-                    print(f'{num:.2f}',end='\t')
-                j += 1
-            i += 1
-
-            print('\n')
-        print('*'*45)
-
-    #update eligibility values for all the qs in list, increasing the value for the q provided (the most recent one) and removing qs that are below the threshold
-    def update_eligibles(self,new_q):
-        self.add2eligible(new_q)    #add new q to list
-        new_q.eligibility = (new_q.eligibility + 1)/self.main.gamma/self.main.lamda      #increase eligibility of current q and made to cancel with first decay
-        for q in self.eligible_qs[:]:       #use copy of list so that can remove qs without screwing up order
-            q.eligibility = q.eligibility * self.main.gamma * self.main.lamda #decay all of them
-            if q.eligibility < self.eligible_thresh:
-                self.eligible_qs.remove(q)      #remove them from the list if they have decayed out of relevancy
-
-    #add a q to the list of eligible qs
-    def add2eligible(self,q):
-        if q not in self.eligible_qs:
-            self.eligible_qs.append(q)
 
     #method that returns (next state, reward) given a state-action pair
     def next_state(self,state,action):
@@ -116,11 +76,6 @@ class Agent:
             return max_action
         else:
             return choice(actions)
-
-    #goes through values in qs and resets eligibilities to 0
-    def reset_eligibilities(self):
-        for q in self.qs.values():
-            q.eligibility = 0
 
     #create a list of all posible actions agent can take
     def calc_actions(self):

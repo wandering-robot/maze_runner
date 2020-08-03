@@ -1,5 +1,5 @@
 from ai_learner.ai_window import Window
-from ai_learner.agent import Agent
+from ai_learner.agent_old import Agent
 
 class AI_main:
     def __init__(self,cell_dict):

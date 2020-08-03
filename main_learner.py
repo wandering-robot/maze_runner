@@ -1,10 +1,10 @@
 from map_creation.drawing_window import Window
 from map_creation.drawing_event_handler import Handler
 from ai_learner.ai_main import AI_main
-
-import pickle
 from map_creation.cell import Cell          #think I need this to pickle/unpickle
 
+import pickle
+import dill
 import atexit
 
 class Main:
@@ -37,7 +37,7 @@ class Main:
     #method called at end of session to save experience
     def save_ai_knowledge(self):
         qs = self.ai_section.agent.qs
-        outfile = open(self.maze_file_name + f'_ai_{self.ai_section.agent.episode_number:04}', 'wb')
+        outfile = open(self.maze_file_name + f'_ai_{self.ai_section.agent.episode_number:06}', 'wb')
         pickle.dump(qs,outfile,protocol=pickle.HIGHEST_PROTOCOL)
 
     #by using self.maze_file_name, return a dictionary of all the cells
@@ -49,10 +49,7 @@ class Main:
                 got_file = True
             except:
                 self.maze_file_name = input('That file name does not exist, please re-enter file name:\t')
-        self.cell_dict = pickle.load(infile)
-            #will eventually need to reinvoke this when wanting to draw it out
-        # for cell in self.cell_dict.values():
-        #     cell.re_surface()
+        self.cell_dict = dill.load(infile)
         infile.close()
         return self.cell_dict
 
@@ -61,7 +58,7 @@ class Main:
         outfile = open(self.maze_file_name,'wb')
         for cell in self.window.cells.values():
             cell.de_surface()
-        pickle.dump(self.window.cells,outfile,protocol=pickle.HIGHEST_PROTOCOL)
+        dill.dump(self.window.cells,outfile,protocol=pickle.HIGHEST_PROTOCOL)
         outfile.close()
 
     #defines maze_file_name
